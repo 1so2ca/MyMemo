@@ -26,6 +26,7 @@ description: PoC の完了処理。完了基準の判定、docs/poc-findings.md 
    - 実行前に承認を得る
 5. フェーズ移行
    - PoC 用スキル（`poc-try` / `poc-log` / 本スキル）を削除
+   - PoC 抑制 hook を削除（`.claude/hooks/poc-phase.sh` と `.claude/settings.json` の SessionStart エントリ）。これで pr-flow が有効になる
    - 本実装フェーズのルールを起こす。置き場（子 `CLAUDE.md` / スキル）はユーザと決める。root `CLAUDE.md` には置かない
      - 軽量 DDD（ドメイン層を分離。集約・値オブジェクト・ドメインサービスを最小構成で）
      - TDD（Red-Green-Refactor）
