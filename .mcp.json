@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cloudflare-docs": {
+      "type": "sse",
+      "url": "https://docs.mcp.cloudflare.com/sse"
+    },
+    "svelte": {
+      "type": "http",
+      "url": "https://mcp.svelte.dev/mcp"
+    }
+  }
+}
