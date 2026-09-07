@@ -23,10 +23,20 @@
 
 ### インフラ
 
-- **D1** Worker 単位 Access が `wrangler dev --remote` の preview を覆うか
+- **D1** Worker 単位 Access をかけた preview URL にスマホから到達できるか（`wrangler dev --remote` は localhost 提供のため実機に使えない）
 - **D2** 自動保存と読み込みが D1 で動くか
 - **D3** 実利用ペースからの月額見積もり（$5/mo 以内か）
 
+### D1 — 2026-09-07
+
+- 試したこと: Worker 単位 Access で保護した preview alias URL を Android Chrome から OTP 認証後に開いた
+- 事実: `shell OK` と `Mozilla/5.0 (Linux; Android 10; K) ... Chrome/148.0.0.0 Mobile Safari/537.36` が表示された
+- 解釈: Access で保護した Worker の preview URL へ Android Chrome から到達し、静的アセットを取得できる
+- 判定: 採用
+- 再現: `npx --yes wrangler@4.129.0 versions upload --preview-alias shell --config wrangler.jsonc`
+
 ## 本実装に持ち込むもの
+
+- 実機検証には、Worker 単位 Access で保護した preview alias URL を使用する
 
 ## 残課題
