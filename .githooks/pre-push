@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "push blocked: gitleaks is not installed or not on PATH" >&2
+  exit 1
+fi
+
+.githooks/check-forbidden-files history
+
+exec gitleaks git --redact --verbose --log-opts="--all" .

@@ -1,0 +1,55 @@
+#!/bin/sh
+set -eu
+
+mode=${1:-}
+
+case "$mode" in
+  staged)
+    paths=$(git diff --cached --name-only --diff-filter=ACMR)
+    ;;
+  history)
+    paths=$(git log --all --name-only --format=)
+    ;;
+  *)
+    echo "usage: $0 staged|history" >&2
+    exit 2
+    ;;
+esac
+
+forbidden=
+
+old_ifs=$IFS
+IFS='
+'
+for path in $paths; do
+  case "$path" in
+    .env.example|*/.env.example|.env.*.example|*/.env.*.example)
+      ;;
+    .dev.vars.example|*/.dev.vars.example|.dev.vars.*.example|*/.dev.vars.*.example)
+      ;;
+    .env|*/.env|.env.*|*/.env.*)
+      forbidden="${forbidden}${path}\n"
+      ;;
+    .dev.vars|*/.dev.vars|.dev.vars.*|*/.dev.vars.*)
+      forbidden="${forbidden}${path}\n"
+      ;;
+    .wrangler/*|*/.wrangler/*)
+      forbidden="${forbidden}${path}\n"
+      ;;
+    *.pem|*.key|*.p12|*.pfx|*.jks|*.keystore)
+      forbidden="${forbidden}${path}\n"
+      ;;
+    id_rsa|*/id_rsa|id_ed25519|*/id_ed25519)
+      forbidden="${forbidden}${path}\n"
+      ;;
+    credentials.json|*/credentials.json|service-account*.json|*/service-account*.json)
+      forbidden="${forbidden}${path}\n"
+      ;;
+  esac
+done
+IFS=$old_ifs
+
+if [ -n "$forbidden" ]; then
+  printf "operation blocked: forbidden credential files found:\n%b" "$forbidden" >&2
+  exit 1
+fi
